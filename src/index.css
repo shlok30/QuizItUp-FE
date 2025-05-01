@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #FFFBF5;
+  --color-primary: #00BFA6;  /* Generate Quiz button */
+  --color-secondary: #A78BFA;  /* Submit button */
+  --color-wrong: #FF6B6B;  /* Wrong answers */
+  --color-correct: #4CAF50;  /* Correct answers */
+  --color-input: #FFC7A5;  /* Input box background */
+  --color-card: #E0F7FA;  /* Quiz card background */
+  --color-dropdown: #FFF3A3;
+  --color-dropdown-border: #E8C14D
+}
