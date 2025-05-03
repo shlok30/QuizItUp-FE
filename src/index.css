@@ -9,5 +9,6 @@
   --color-input: #FFC7A5;  /* Input box background */
   --color-card: #E0F7FA;  /* Quiz card background */
   --color-dropdown: #FFF3A3;
-  --color-dropdown-border: #E8C14D
+  --color-dropdown-border: #E8C14D;
+  --color-selected-option: #3ACCDF;
 }
