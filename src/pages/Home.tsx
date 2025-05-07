@@ -4,6 +4,7 @@ import Select from "../components/Select";
 import Input from "../components/Input";
 import Heading from "../components/Heading1";
 import Loader from "../components/Loader";
+import useForm from "../useForm";
 
 const options = [
   {
@@ -53,50 +54,7 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [formValues, setFormValues] = useState({input: {value: "", error: ""}, difficulty: {value: "", error: ""}});
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const name = e.target.name as "input" | "difficulty"
-    setFormValues(prevState => ({...prevState, [name] : {...prevState[name], value: e.target.value,}}))
-  }
-
-  const handleBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const name = e.target.name as "input" | "difficulty"
-    const value = e.target.value;
-    const validationsToRun = validations[name];
-    for(const {validation, error} of validationsToRun){
-      if(!validation(value)){
-        setFormValues(prevState => ({...prevState, [name] : {...prevState[name], error}}));
-        break;
-      }
-    }
-  }
-
-  const handleFocus = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const name = e.target.name as "input" | "difficulty"
-    setFormValues(prevState => ({...prevState, [name] : {...prevState[name], error: ""}}));
-  }
-
-  const validateAllFields = () : string[] => {
-    const fields = Object.keys(formValues) as ("input"|"difficulty")[];
-    const updatedValues = {...formValues};
-    const errors : string[] = [];
-    fields.forEach(field => {
-      const validationsToRun = validations[field];
-      const value = formValues[field].value;
-      let error = ''
-      for(const {validation, error : e} of validationsToRun){
-        if(!validation(value)){
-          error = e;
-          errors.push(e);
-          break;
-        }
-      }
-      updatedValues[field] = {...updatedValues[field], error};
-    });
-    setFormValues({...updatedValues});
-    return errors;
-  }
+  const {formValues, handleBlur, handleChange, handleFocus, validateAllFields} = useForm({initialValues: {input: {value: "", error: ""}, difficulty: {value: "", error: ""}}, validations})
 
   const handleSubmit = () => {
     validateAllFields();
