@@ -7,7 +7,7 @@ type ButtonProps = {
     label?: string,
 }
 
-function Button({customStyles="bg-dropdown",label="",customCallback} : ButtonProps): React.ReactElement{
+function Button({customStyles="",label="",customCallback} : ButtonProps): React.ReactElement{
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         if(customCallback)

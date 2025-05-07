@@ -7,23 +7,42 @@ type Options = {id: number, label: string}[]
 type SelectProps = {
     options: Options,
     customStyles?: string,
-    onChange?: (value : number) => void,
-    placeholder?: string
+    onChange?: (value : React.ChangeEvent<HTMLSelectElement>) => void,
+    placeholder?: string,
+    name: string,
+    error: string,
+    value: string,
+    onBlur?: (value : React.ChangeEvent<HTMLSelectElement>) => void,
+    onFocus?: (value : React.ChangeEvent<HTMLSelectElement>) => void,
 }
 
-function Select({options, customStyles="", onChange, placeholder} : SelectProps){
+function Select({options, customStyles="", onChange, placeholder, name, error, value, onBlur, onFocus} : SelectProps){
 
-    const handleChange = (value) => {
+    const handleChange = (value : React.ChangeEvent<HTMLSelectElement>) => {
         if(onChange)
             onChange(value);
     }
 
-    return (<select onChange={handleChange} className={`bg-dropdown border-2 border-dropdown-border p-4 rounded-2xl w-80 md:w-150 lg:w-200 text-xl font-bold cursor-pointer ${customStyles}`} defaultValue="">
-        {placeholder && <option value="" hidden disabled>{placeholder}</option>}
-        {
-            options.map(({id,label} : Option) => <option value={id}>{label}</option>)
-        }
-    </select>)
+    const handleBlur = (value : React.ChangeEvent<HTMLSelectElement>) => {
+        if(onBlur)
+            onBlur(value);
+    }
+
+    const handleFocus =  (value : React.ChangeEvent<HTMLSelectElement>) => {
+        if(onFocus)
+            onFocus(value);
+    }
+
+    return (
+    <div className="flex flex-col gap-4">
+        <select name={name} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={`bg-dropdown border-2 border-dropdown-border p-4 rounded-2xl w-80 md:w-150 lg:w-200 text-xl font-bold cursor-pointer ${customStyles}`} value={value} defaultValue="">
+            {placeholder && <option value="" hidden disabled>{placeholder}</option>}
+            {options.map(({id,label} : Option) => <option value={id}>{label}</option>)}
+        </select>
+        {error && <p className="text-wrong">{error}</p>}
+    </div>
+    
+    )
 }
 
 export default Select
