@@ -24,26 +24,29 @@ const options = [
   }
 ];
 
-const inputValidations = [
-  {
-    name : "Max Length",
-    validation: (value : string) => !(value.length > 32),
-    error: "Max length of 32 characters allowed!"
-  },
-  {
-    name : "Required",
-    validation: (value: string) => Boolean(value.length),
-    error: "This is a required field!"
-  }
-];
+const validations = {
+  input: [
+    {
+      name: "Max Length",
+      validation: (value: string) => !(value.length > 32),
+      error: "Max length of 32 characters allowed!"
+    },
+    {
+      name: "Required",
+      validation: (value: string) => Boolean(value.length),
+      error: "This is a required field!"
+    }
+  ],
+  difficulty: [
+    {
+      name: "Required",
+      validation: (value: string) => Boolean(value),
+      error: "This is a required field!"
+    }
+  ]
+};
 
-const selectValidations = [
-  {
-    name: "Required",
-    validation: (value: string) => Boolean(value),
-    error: "This is a required field!"
-  }
-];
+
 
 
 function App() {
@@ -60,20 +63,11 @@ function App() {
   const handleBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const name = e.target.name as "input" | "difficulty"
     const value = e.target.value;
-    if(name === "input"){
-      for(const {validation, error} of inputValidations){
-        if(!validation(value)){
-          setFormValues(prevState => ({...prevState, [name] : {...prevState[name], error}}));
-          break;
-        }
-      }
-    }
-    else{
-      for(const {validation, error} of selectValidations){
-        if(!validation(value)){
-          setFormValues(prevState => ({...prevState, [name] : {...prevState[name], error}}));
-          break;
-        }
+    const validationsToRun = validations[name];
+    for(const {validation, error} of validationsToRun){
+      if(!validation(value)){
+        setFormValues(prevState => ({...prevState, [name] : {...prevState[name], error}}));
+        break;
       }
     }
   }
@@ -81,6 +75,32 @@ function App() {
   const handleFocus = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const name = e.target.name as "input" | "difficulty"
     setFormValues(prevState => ({...prevState, [name] : {...prevState[name], error: ""}}));
+  }
+
+  const validateAllFields = () : string[] => {
+    const fields = Object.keys(formValues) as ("input"|"difficulty")[];
+    const updatedValues = {...formValues};
+    const errors : string[] = [];
+    fields.forEach(field => {
+      const validationsToRun = validations[field];
+      const value = formValues[field].value;
+      let error = ''
+      for(const {validation, error : e} of validationsToRun){
+        if(!validation(value)){
+          error = e;
+          errors.push(e);
+          break;
+        }
+      }
+      updatedValues[field] = {...updatedValues[field], error};
+    });
+    setFormValues({...updatedValues});
+    return errors;
+  }
+
+  const handleSubmit = () => {
+    validateAllFields();
+    // setIsLoading(true);
   }
 
   if(isLoading)
@@ -107,7 +127,7 @@ function App() {
         <div>
           <Select onBlur={handleBlur} onFocus={handleFocus} value={formValues.difficulty.value} name="difficulty" error={formValues.difficulty.error} onChange={handleChange} options={options} placeholder="Select Difficulty"/>
         </div>
-        <Button label="Generate Quiz" customCallback={() => setIsLoading(true)}/>
+        <Button label="Generate Quiz" customCallback={handleSubmit}/>
       </section>
     </div>
   )
