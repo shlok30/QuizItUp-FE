@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "../components/Button";
 import Select from "../components/Select";
 import Input from "../components/Input";
 import Heading from "../components/Heading1";
-import Loader from "../components/Loader";
 import useForm from "../useForm";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 const options = [
   {
@@ -52,24 +53,20 @@ const validations = {
 
 function App() {
 
-  const [isLoading, setIsLoading] = useState(false);
+  const {formValues, handleBlur, handleChange, handleFocus, validateAllFields} = useForm({initialValues: {input: {value: "", error: ""}, difficulty: {value: "", error: ""}}, validations});
 
-  const {formValues, handleBlur, handleChange, handleFocus, validateAllFields} = useForm({initialValues: {input: {value: "", error: ""}, difficulty: {value: "", error: ""}}, validations})
+  useSelector(state => console.log(state));
+
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
-    validateAllFields();
-    // setIsLoading(true);
+    const errors = validateAllFields();
+    if(!errors.length){
+      const topic = formValues.input.value;
+      const difficulty = formValues.difficulty.value;
+      navigate(`/quiz?topic=${topic}&difficulty=${difficulty}`);
+    }
   }
-
-  if(isLoading)
-    return (
-      <div className="h-screen bg-background flex justify-center items-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader />
-          <p className="font-semibold text-2xl">Your Quiz is Loading</p>
-        </div>
-      </div>
-    )
 
   return (
     <div className='bg-background h-screen'>

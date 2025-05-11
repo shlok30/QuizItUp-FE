@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 
 type UseFetchProps = {
     endpoint: string,
-    options :RequestInit
+    options? :RequestInit
+}
+
+type Response = {
+    isLoading: boolean,
+    isError: boolean,
+    data: null | unknown
 }
 
 function useFetch({endpoint,options} : UseFetchProps){
     
-    const [response, setResponse] = useState({isLoading: false, data: null, isError: false});
+    const [response, setResponse] = useState<Response>({isLoading: true, data: null, isError: false});
 
     useEffect(() => {
         let isMounted = true;
