@@ -8,10 +8,12 @@ import endpoints from "../endpoints";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { setQuizData } from "../features/quiz";
+import { RootState } from "../store";
+import ErrorMessage from "../components/ErrorMessage";
 
 type QuizSessionEntity = {
     selectedAnswerIdx: string,
-    correctAnswerIdx: string,
+    correctAnswerIdx?: string,
 }
 
 function Quiz(){
@@ -21,22 +23,17 @@ function Quiz(){
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { quiz } = useSelector(state => state.quiz);
-
-
-    console.log(quizSession);
-
-    console.log("This is Quiz",quiz);
+    const { quiz } = useSelector((state : RootState) => state.quiz);
 
     const {isLoading, data, isError} = useFetch({endpoint: `${endpoints.getQuizes}${location.search}`});
 
-    const handleOptionClick = (optionIdx) => {
+    const handleOptionClick = (optionIdx: number) => {
         setQuizSession(prevState => {
             const session = [...prevState];
             const currentQuestion = {...session[activeIdx]};
-            currentQuestion.selectedAnswerIdx = optionIdx;
+            currentQuestion.selectedAnswerIdx = optionIdx.toString();
             if(!('correctAnswerIdx' in currentQuestion))
-                currentQuestion.correctAnswerIdx = quiz[activeIdx]?.options.indexOf(quiz[activeIdx]?.correctAnswer)
+                currentQuestion.correctAnswerIdx = quiz[activeIdx]?.options.indexOf(quiz[activeIdx]?.correctAnswer).toString()
             session[activeIdx]= currentQuestion;
             return [...session];
         })
@@ -66,6 +63,10 @@ function Quiz(){
             </div>
           </div>
         )
+    
+    if (isError) 
+        return <ErrorMessage onRetry={() => window.location.reload()} />;
+
 
     const currentQuestionMeta = quiz[activeIdx];
 
@@ -79,7 +80,7 @@ function Quiz(){
                     <Question label={currentQuestionMeta?.question} customStyle="text-center"/>
                 </div>
                 <div className="flex justify-center items-center flex-col gap-6 py-8">
-                    {currentQuestionMeta.options.map((option, idx) => <Button customCallback={() => handleOptionClick(idx)} label={option} customStyles={`text-neutral-900 ${quizSession[activeIdx]?.selectedAnswerIdx === idx ? 'bg-primary' : 'bg-dropdown-border'}`}/>)}
+                    {currentQuestionMeta.options.map((option, idx) => <Button customCallback={() => handleOptionClick(idx)} label={option} customStyles={`text-neutral-900 ${quizSession[activeIdx]?.selectedAnswerIdx === idx.toString() ? 'bg-primary' : 'bg-dropdown-border'}`}/>)}
                 </div>
                 <div className="flex justify-center py-4">
                     <Button customCallback={handleSubmit} label="Submit" customStyles={Number(quizSession[activeIdx]?.selectedAnswerIdx) >= 0 ? 'bg-secondary' : 'cursor-none pointer-events-none bg-gray-400'}/>

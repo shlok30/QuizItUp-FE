@@ -5,7 +5,9 @@ type QuizElement = {
     question : string,
     options: string[],
     correctAnswer: string,
-    explanation: string
+    explanation: string,
+    correctAnswerIdx: string,
+    selectedAnswerIdx: string,
 }
 
 type Quiz = QuizElement[]
