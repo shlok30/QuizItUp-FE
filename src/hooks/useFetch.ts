@@ -5,15 +5,15 @@ type UseFetchProps = {
     options? :RequestInit
 }
 
-type Response = {
+type Response<T> = {
     isLoading: boolean,
     isError: boolean,
-    data: null | unknown
+    data: T | null
 }
 
-function useFetch({endpoint,options} : UseFetchProps){
+function useFetch<T = unknown>({endpoint,options} : UseFetchProps): Response<T>{
     
-    const [response, setResponse] = useState<Response>({isLoading: true, data: null, isError: false});
+    const [response, setResponse] = useState<Response<T>>({isLoading: true, data: null, isError: false});
 
     useEffect(() => {
         let isMounted = true;

@@ -16,6 +16,14 @@ type QuizSessionEntity = {
     correctAnswerIdx?: string,
 }
 
+type QuizResponse = {
+  data: {
+    question: string;
+    options: string[];
+    correctAnswer: string;
+  }[];
+};
+
 function Quiz(){
 
     const [activeIdx, setActiveIdx] = useState(0);
@@ -25,7 +33,7 @@ function Quiz(){
     const navigate = useNavigate();
     const { quiz } = useSelector((state : RootState) => state.quiz);
 
-    const {isLoading, data, isError} = useFetch({endpoint: `${endpoints.getQuizes}${location.search}`});
+    const {isLoading, data, isError} = useFetch<QuizResponse>({endpoint: `${endpoints.getQuizes}${location.search}`});
 
     const handleOptionClick = (optionIdx: number) => {
         setQuizSession(prevState => {
