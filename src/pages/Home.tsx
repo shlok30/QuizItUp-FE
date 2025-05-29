@@ -35,7 +35,7 @@ const validations = {
     },
     {
       name: "Required",
-      validation: (value: string) => Boolean(value.length),
+      validation: (value: string) => Boolean(value.trim().length),
       error: "This is a required field!"
     }
   ],
@@ -62,7 +62,7 @@ function App() {
   const handleSubmit = () => {
     const errors = validateAllFields();
     if(!errors.length){
-      const topic = formValues.input.value;
+      const topic = formValues.input.value.trim();
       const difficulty = formValues.difficulty.value;
       navigate(`/quiz?topic=${topic}&difficulty=${difficulty}`);
     }

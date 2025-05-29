@@ -49,6 +49,11 @@ function Quiz(){
         })
     }
 
+    const handleNavigation = () => {
+        if(activeIdx)
+            setActiveIdx(prevIdx => prevIdx - 1);
+    }
+
     const handleSubmit = () => {
         if(activeIdx < 2) //Hardcoding for now will need to fix soon
             setActiveIdx(prev => prev + 1);
@@ -83,7 +88,7 @@ function Quiz(){
     return(
         <div className="bg-background h-screen flex flex-col">
             <div className="flex gap-2 p-6 items-center">
-                <QuestionNavigation currentNumber={activeIdx + 1} totalNumber={5}/>
+                <QuestionNavigation handleNavigation={handleNavigation} currentNumber={activeIdx + 1} totalNumber={5}/>
             </div>
             <div className="py-20 flex-1 flex flex-col items-center justify-center">
                 <div className="flex justify-center items-center">
