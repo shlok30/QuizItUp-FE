@@ -1,3 +1,4 @@
+import History from "./pages/History";
 import Home from "./pages/Home";
 import Quiz from "./pages/Quiz";
 import Summary from "./pages/Summary";
@@ -14,6 +15,10 @@ const routes = [
     {
         path : "/summary",
         component: Summary
+    },
+    {
+        path: "/history",
+        component: History
     }
 ];
 
