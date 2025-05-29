@@ -5,30 +5,39 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import QuestionAnswer from "../components/QuestionAnswer";
 import { useNavigate } from "react-router";
+import endpoints from "../endpoints";
 
 function Summary(){
     const { quiz } = useSelector((state: RootState) => state.quiz);
 
+    console.log("Inside Summary",quiz);
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(!quiz.length)
+        if(!quiz?.questions.length)
             navigate("/");
     },[quiz, navigate])
 
-    const score = quiz.reduce((acc,curr) => {
+    const score = quiz.questions.reduce((acc,curr) => {
         if(curr.correctAnswerIdx === curr.selectedAnswerIdx)
             return acc + 1;
         return acc;
     } ,0)
 
+    const reportQuiz = async () => {
+        const rawResponse = await fetch(endpoints.addQuiz,{method: "POST", body: JSON.stringify({...quiz, score}) ,headers: {"Content-Type": "application/json",authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODM2MDA3MWNiNDQ2MmI1NTJjMzk4MGIiLCJpYXQiOjE3NDgzNzQ2ODAsImV4cCI6MTc0ODM3ODI4MH0.zn7iUNlEgIj1a_ODYxU0cORqJiSYzSUeCaO-zLwVmyU"}});
+        const response = await rawResponse.json();
+        console.log(response);
+    }
+
     return(
         <div className="bg-primary h-screen flex justify-center items-center flex-col gap-6 py-8">
-            <Heading label={`You scored ${score}/${quiz.length}`} />
+            <Heading label={`You scored ${score}/${quiz.questions.length}`} />
             <div className="bg-dropdown h-160 w-60 sm:w-120 rounded-3xl overflow-y-auto">
-                {quiz.map((q,idx) => <QuestionAnswer explanation={q.explanation} questionNumber={idx + 1} options={q.options} correctAnswerIdx={q.correctAnswerIdx} selectedAnswerIdx={q.selectedAnswerIdx}/> )}
+                {quiz.questions.map((q,idx) => <QuestionAnswer explanation={q.explanation} questionNumber={idx + 1} options={q.options} correctAnswerIdx={q.correctAnswerIdx} selectedAnswerIdx={q.selectedAnswerIdx}/> )}
             </div>
-            <Button label="Home" customStyles="bg-wrong w-60 lg:w-120"/>
+            <Button customCallback={reportQuiz} label="Home" customStyles="bg-wrong w-60 lg:w-120"/>
         </div>
     )
 }

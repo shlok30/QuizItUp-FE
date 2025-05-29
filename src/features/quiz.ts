@@ -10,14 +10,25 @@ type QuizElement = {
     selectedAnswerIdx: string,
 }
 
-type Quiz = QuizElement[]
+type Quiz = {
+    topic: string,
+    genre: string,
+    difficulty: string,
+    score?: number,
+    questions: QuizElement[]
+}
 
 type InitialState = {
-    quiz: Quiz,
+    quiz: Quiz
 }
 
 const initialState : InitialState = {
-    quiz: [],
+    quiz: {
+        topic: "",
+        genre: "",
+        difficulty: "",
+        questions: []
+    }
 }
 
 const quizSlice = createSlice({
@@ -25,7 +36,7 @@ const quizSlice = createSlice({
     initialState,
     reducers: {
         setQuizData: (state, action) => {
-            console.log("Came here");
+            console.log("Came here",action.payload);
             state.quiz = action.payload
         },
     }

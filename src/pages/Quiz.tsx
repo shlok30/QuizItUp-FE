@@ -35,13 +35,15 @@ function Quiz(){
 
     const {isLoading, data, isError} = useFetch<QuizResponse>({endpoint: `${endpoints.getQuizes}${location.search}`});
 
+    console.log("QUIZ",quiz);
+
     const handleOptionClick = (optionIdx: number) => {
         setQuizSession(prevState => {
             const session = [...prevState];
             const currentQuestion = {...session[activeIdx]};
             currentQuestion.selectedAnswerIdx = optionIdx.toString();
             if(!('correctAnswerIdx' in currentQuestion))
-                currentQuestion.correctAnswerIdx = quiz[activeIdx]?.options.indexOf(quiz[activeIdx]?.correctAnswer).toString()
+                currentQuestion.correctAnswerIdx = quiz.questions[activeIdx]?.options.indexOf(quiz.questions[activeIdx]?.correctAnswer).toString()
             session[activeIdx]= currentQuestion;
             return [...session];
         })
@@ -51,8 +53,8 @@ function Quiz(){
         if(activeIdx < 2) //Hardcoding for now will need to fix soon
             setActiveIdx(prev => prev + 1);
         else{ //Sync local state with redux and navigate to summary page
-            const updatedQuizSession = quiz.map((question,idx) => ({...question, ...quizSession[idx]}));
-            dispatch(setQuizData([...updatedQuizSession]));
+            const updatedQuizSession = quiz.questions.map((question,idx) => ({...question, ...quizSession[idx]}));
+            dispatch(setQuizData({...quiz, questions: [...updatedQuizSession]}));
             navigate("/summary");
         }
     }
@@ -62,7 +64,7 @@ function Quiz(){
             dispatch(setQuizData(data?.data));
     },[data])
 
-    if(isLoading || !quiz.length)
+    if(isLoading || !quiz.questions.length)
         return (
           <div className="h-screen bg-background flex justify-center items-center">
             <div className="flex flex-col items-center gap-4">
@@ -76,7 +78,7 @@ function Quiz(){
         return <ErrorMessage onRetry={() => window.location.reload()} />;
 
 
-    const currentQuestionMeta = quiz[activeIdx];
+    const currentQuestionMeta = quiz.questions[activeIdx];
 
     return(
         <div className="bg-background h-screen flex flex-col">
