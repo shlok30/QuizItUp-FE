@@ -95,7 +95,7 @@ function Quiz(){
                     <Question label={currentQuestionMeta?.question} customStyle="text-center"/>
                 </div>
                 <div className="flex justify-center items-center flex-col gap-6 py-8">
-                    {currentQuestionMeta.options.map((option, idx) => <Button customCallback={() => handleOptionClick(idx)} label={option} customStyles={`text-neutral-900 ${quizSession[activeIdx]?.selectedAnswerIdx === idx.toString() ? 'bg-primary' : 'bg-dropdown-border'}`}/>)}
+                    {currentQuestionMeta.options.map((option, idx) => <Button customCallback={() => handleOptionClick(idx)} label={option} customStyles={`text-neutral-900 rounded-3xl ${quizSession[activeIdx]?.selectedAnswerIdx === idx.toString() ? 'bg-primary' : 'bg-dropdown-border'}`}/>)}
                 </div>
                 <div className="flex justify-center py-4">
                     <Button customCallback={handleSubmit} label="Submit" customStyles={Number(quizSession[activeIdx]?.selectedAnswerIdx) >= 0 ? 'bg-secondary' : 'cursor-none pointer-events-none bg-gray-400'}/>

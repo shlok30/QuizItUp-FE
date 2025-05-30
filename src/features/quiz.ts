@@ -10,7 +10,7 @@ type QuizElement = {
     selectedAnswerIdx: string,
 }
 
-type Quiz = {
+export type Quiz = {
     topic: string,
     genre: string,
     difficulty: string,
