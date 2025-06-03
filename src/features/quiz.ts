@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Quiz from '../pages/Quiz';
 
-type QuizElement = {
+export type QuizElement = {
     question : string,
     options: string[],
     correctAnswer: string,
@@ -13,7 +13,7 @@ type QuizElement = {
 export type Quiz = {
     topic: string,
     genre: string,
-    difficulty: string,
+    difficulty: 'easy' | 'medium' | 'difficult' | '',
     score?: number,
     questions: QuizElement[]
 }

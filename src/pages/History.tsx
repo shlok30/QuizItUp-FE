@@ -3,18 +3,29 @@ import Heading from "../components/Heading1";
 import QuizCard from "../components/QuizCard";
 import useFetch from "../hooks/useFetch";
 import endpoints from "../endpoints";
-import { Quiz } from "../features/quiz";
+import { Quiz, setQuizData } from "../features/quiz";
 import Loader from "../components/Loader";
 import ErrorMessage from "../components/ErrorMessage";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
-type QuizWithId = Quiz & { _id: string };
+type QuizWithId = Quiz & { _id: string, score: number };
 type Quizzes = {quizzes: QuizWithId[]}
 
-const options = {headers: {Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODM2MDA3MWNiNDQ2MmI1NTJjMzk4MGIiLCJpYXQiOjE3NDg2MzEzNDksImV4cCI6MTc0ODYzNDk0OX0.-8MG3t-ySLibw8WdWJLlcoy_ILmWwMdlvTSzbTXTpb8"}};
+const options = {headers: {Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODM2MDA3MWNiNDQ2MmI1NTJjMzk4MGIiLCJpYXQiOjE3NDg5NDkzODUsImV4cCI6MTc0ODk1Mjk4NX0.5Kx0BOzQrLJxIfWyk75CkqV8qVE_RtiVczlIDy2w7BI"}};
 
 function History(){
 
     const {data, isLoading, isError} = useFetch<Quizzes>({endpoint: endpoints.getAllQuizzes, options});
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleQuizCardClick = (quiz: QuizWithId) => {
+      dispatch(setQuizData(quiz));
+      navigate("/summary");
+    }
+
+    
 
     if(isLoading)
         return (
@@ -44,7 +55,7 @@ function History(){
                 <Heading label="Quiz History" />
             </header>
             <section className="flex flex-col items-center gap-3">
-                {data?.quizzes?.map(quiz => <QuizCard score={quiz.score} topic={quiz.topic} genre={quiz.genre} difficulty={quiz.difficulty} id={quiz["_id"]}/>)}
+                {data?.quizzes?.map(quiz => <QuizCard questions={quiz.questions} customCallback={handleQuizCardClick} score={quiz.score} topic={quiz.topic} genre={quiz.genre} difficulty={quiz.difficulty} id={quiz["_id"]}/>)}
             </section>
         </div>
     )

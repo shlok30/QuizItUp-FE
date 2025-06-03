@@ -19,14 +19,14 @@ function Summary(){
             navigate("/");
     },[quiz, navigate])
 
-    const score = quiz.questions.reduce((acc,curr) => {
+    const score = quiz.score ||  quiz.questions.reduce((acc,curr) => {
         if(curr.correctAnswerIdx === curr.selectedAnswerIdx)
             return acc + 1;
         return acc;
     } ,0)
 
     const reportQuiz = async () => {
-        const rawResponse = await fetch(endpoints.addQuiz,{method: "POST", body: JSON.stringify({...quiz, score}) ,headers: {"Content-Type": "application/json",authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODM2MDA3MWNiNDQ2MmI1NTJjMzk4MGIiLCJpYXQiOjE3NDgzNzQ2ODAsImV4cCI6MTc0ODM3ODI4MH0.zn7iUNlEgIj1a_ODYxU0cORqJiSYzSUeCaO-zLwVmyU"}});
+        const rawResponse = await fetch(endpoints.addQuiz,{method: "POST", body: JSON.stringify({...quiz, score}) ,headers: {"Content-Type": "application/json",authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODM2MDA3MWNiNDQ2MmI1NTJjMzk4MGIiLCJpYXQiOjE3NDg5NDIwNTgsImV4cCI6MTc0ODk0NTY1OH0.hy00u3KozB9VvOFbOJhyMgPVbTBk_XgZJNGkl6AGn0g"}});
         const response = await rawResponse.json();
         console.log(response);
     }
