@@ -7,7 +7,7 @@ type InputProps = {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
     value: string,
     name: string,
-    error: string,
+    error?: string,
     onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void,
     onFocus?: (e: React.ChangeEvent<HTMLInputElement>) => void,
 }

@@ -1,22 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
 import Heading from "../components/Heading1";
 import QuizCard from "../components/QuizCard";
 import useFetch from "../hooks/useFetch";
 import endpoints from "../endpoints";
-import { Quiz, setQuizData } from "../features/quiz";
+import { setQuizData } from "../features/quiz";
 import Loader from "../components/Loader";
 import ErrorMessage from "../components/ErrorMessage";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import Input from "../components/Input";
+import { DifficultyFilter } from "../components/DifficultyFilter";
+import { QuizWithId, Quizzes } from "../types";
 
-type QuizWithId = Quiz & { _id: string, score: number };
-type Quizzes = {quizzes: QuizWithId[]}
+const filerOptions = [{ id: 'easy', value: 'easy' }, { id: 'medium', value: 'medium' }, { id: 'hard', value: 'hard' }];
 
-const options = {headers: {Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODM2MDA3MWNiNDQ2MmI1NTJjMzk4MGIiLCJpYXQiOjE3NDg5NDkzODUsImV4cCI6MTc0ODk1Mjk4NX0.5Kx0BOzQrLJxIfWyk75CkqV8qVE_RtiVczlIDy2w7BI"}};
+const options = {headers: {Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODM2MDA3MWNiNDQ2MmI1NTJjMzk4MGIiLCJpYXQiOjE3NDg5ODAxOTgsImV4cCI6MTc0ODk4Mzc5OH0.5WhCOinbG012Qs2GE1Az_uNWux7E9NcZxxeh_0q7Ni8"}};
 
 function History(){
 
-    const {data, isLoading, isError} = useFetch<Quizzes>({endpoint: endpoints.getAllQuizzes, options});
+    const [searchParams, setSearchParams] = useSearchParams({topic: "", difficulty: ""});
+
+    const { search: queryParams } = useLocation();
+
+    const [search, setSearch] = useState(searchParams.get("topic") || '');
+    
+    const {data, isLoading, isError} = useFetch<Quizzes>({endpoint: `${endpoints.getAllQuizzes}${queryParams}`, options});
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -25,7 +33,23 @@ function History(){
       navigate("/summary");
     }
 
-    
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearch(e.target.value); //Or Just use debounce here!!!!!
+    }
+
+    const handleSetSearchParams = ({paramLabel, paramValue} : {paramLabel: 'topic' | 'difficulty', paramValue: string}) => {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set(paramLabel, paramValue);
+      setSearchParams(newParams);
+    }
+
+    const handleSearchBlur = () => {
+      handleSetSearchParams({paramLabel: "topic", paramValue: search})
+    }
+
+    const handleDifficultyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      handleSetSearchParams({paramLabel: "difficulty",paramValue: e.target.value})
+    }
 
     if(isLoading)
         return (
@@ -54,8 +78,18 @@ function History(){
             <header className="py-8 flex justify-center">
                 <Heading label="Quiz History" />
             </header>
-            <section className="flex flex-col items-center gap-3">
-                {data?.quizzes?.map(quiz => <QuizCard questions={quiz.questions} customCallback={handleQuizCardClick} score={quiz.score} topic={quiz.topic} genre={quiz.genre} difficulty={quiz.difficulty} id={quiz["_id"]}/>)}
+            <section className="flex flex-col items-center gap-12">
+              <div className="flex flex-col gap-3">
+                <Input onBlur={handleSearchBlur} onChange={handleSearchChange} value={search} type="text" name="search" placeholder="Search by Topic" customStyle="w-3"/>
+                <p className="font-semibold mb-2 text-xl">Filter By Difficulty</p>
+                <DifficultyFilter
+                  name="difficulty"
+                  filterItems={filerOptions}
+                  selectedValue={searchParams.get("difficulty") as string | undefined}
+                  onChange={handleDifficultyChange}
+                />
+              </div>
+                {data?.quizzes?.map(quiz => <QuizCard questions={quiz.questions} customCallback={handleQuizCardClick} score={quiz.score} topic={quiz.topic} genre={quiz.genre} difficulty={quiz.difficulty} _id={quiz["_id"]}/>)}
             </section>
         </div>
     )

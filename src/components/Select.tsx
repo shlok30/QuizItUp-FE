@@ -1,4 +1,5 @@
 import React from "react"
+import { twMerge } from "tailwind-merge";
 
 type Option = {id: number, label: string};
 
@@ -35,7 +36,7 @@ function Select({options, customStyles="", onChange, placeholder, name, error, v
 
     return (
     <div className="flex flex-col gap-4">
-        <select name={name} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={`bg-dropdown border-2 border-dropdown-border p-4 rounded-2xl w-80 md:w-150 lg:w-200 text-xl font-bold cursor-pointer ${customStyles}`} value={value} defaultValue="">
+        <select name={name} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={twMerge("bg-dropdown border-2 border-dropdown-border p-4 rounded-2xl w-80 md:w-150 lg:w-200 text-xl font-bold cursor-pointer",customStyles)} value={value} defaultValue="">
             {placeholder && <option value="" hidden disabled>{placeholder}</option>}
             {options.map(({id,label} : Option) => <option value={id}>{label}</option>)}
         </select>

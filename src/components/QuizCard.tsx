@@ -1,23 +1,14 @@
 import React from "react";
-import { QuizElement } from "../features/quiz";
+import { QuizWithId } from "../types";
 
-type QuizCardProps = {
-    topic: string,
-    genre: string,
-    difficulty: "easy" | "medium" | "difficulty",
-    id: string,
-    score: number,
-    questions: QuizElement[]
-}
-
-function QuizCard({topic, genre, difficulty, id='', score, customCallback, questions} : (QuizCardProps & {customCallback: (quizObject: QuizCardProps) => void})){
+function QuizCard({topic, genre, difficulty, _id='', score, customCallback, questions} : (QuizWithId & {customCallback: (quizObject: QuizCardProps) => void})){
 
     const handleClick = () => {
         customCallback({
             topic,
             genre,
             difficulty,
-            id,
+            id: _id,
             score,
             questions
         });
