@@ -1,11 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import Button from "../components/Button";
 import Select from "../components/Select";
 import Input from "../components/Input";
 import Heading from "../components/Heading1";
 import useForm from "../useForm";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+
 
 const options = [
   {
@@ -54,8 +54,6 @@ const validations = {
 function App() {
 
   const {formValues, handleBlur, handleChange, handleFocus, validateAllFields} = useForm({initialValues: {input: {value: "", error: ""}, difficulty: {value: "", error: ""}}, validations});
-
-  useSelector(state => console.log(state));
 
   const navigate = useNavigate();
 

@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setQuizData } from "../features/quiz";
 import { RootState } from "../store";
 import ErrorMessage from "../components/ErrorMessage";
+import { handleAuthError } from "../utils";
 
 type QuizSessionEntity = {
     selectedAnswerIdx: string,
@@ -33,7 +34,7 @@ function Quiz(){
     const navigate = useNavigate();
     const { quiz } = useSelector((state : RootState) => state.quiz);
 
-    const {isLoading, data, isError} = useFetch<QuizResponse>({endpoint: `${endpoints.getQuizes}${location.search}`});
+    const {isLoading, data, isError} = useFetch<QuizResponse>({endpoint: `${endpoints.getQuizes}${location.search}`, options: {headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}}, onError: (response) => handleAuthError(response.status, dispatch, navigate)});
 
     console.log("QUIZ",quiz);
 

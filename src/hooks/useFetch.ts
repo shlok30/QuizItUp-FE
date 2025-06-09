@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 
 type UseFetchProps = {
     endpoint: string,
-    options? :RequestInit
+    options? :RequestInit,
+    onError?: (response: globalThis.Response) => void
 }
 
 type Response<T> = {
@@ -11,7 +12,7 @@ type Response<T> = {
     data: T | null
 }
 
-function useFetch<T = unknown>({endpoint,options} : UseFetchProps): Response<T>{
+function useFetch<T = unknown>({endpoint,options, onError} : UseFetchProps): Response<T>{
     
     const [response, setResponse] = useState<Response<T>>({isLoading: true, data: null, isError: false});
 
@@ -24,6 +25,7 @@ function useFetch<T = unknown>({endpoint,options} : UseFetchProps): Response<T>{
                 if(!isMounted) return;
                 if(rawResponse.status !== 200){
                     setResponse(prevState => ({...prevState, isError: true, isLoading: false}));
+                    if(onError) onError(rawResponse);
                     return;
                 }  
                 const response = await rawResponse.json();

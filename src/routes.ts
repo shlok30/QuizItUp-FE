@@ -7,7 +7,8 @@ import Summary from "./pages/Summary";
 const routes = [
     {
         path : "/",
-        component: Home
+        component: Home,
+        isProtected: true
     },
     {
         path: "/login",
@@ -15,15 +16,18 @@ const routes = [
     },
     {
         path : "/quiz",
-        component: Quiz
+        component: Quiz,
+        isProtected: true
     },
     {
         path : "/summary",
-        component: Summary
+        component: Summary,
+        isProtected: true,
     },
     {
         path: "/history",
-        component: History
+        component: History,
+        isProtected: true
     }
 ];
 
