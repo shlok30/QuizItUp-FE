@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
 import Heading from "../components/Heading1";
@@ -11,22 +11,27 @@ import ErrorMessage from "../components/ErrorMessage";
 import Input from "../components/Input";
 import { DifficultyFilter } from "../components/DifficultyFilter";
 import { QuizWithId, Quizzes } from "../types";
+import { handleAuthError } from "../utils";
 
 const filerOptions = [{ id: 'easy', value: 'easy' }, { id: 'medium', value: 'medium' }, { id: 'hard', value: 'hard' }];
 
-const options = {headers: {Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODM2MDA3MWNiNDQ2MmI1NTJjMzk4MGIiLCJpYXQiOjE3NDg5ODAxOTgsImV4cCI6MTc0ODk4Mzc5OH0.5WhCOinbG012Qs2GE1Az_uNWux7E9NcZxxeh_0q7Ni8"}};
+const options = {headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}};
 
 function History(){
 
     const [searchParams, setSearchParams] = useSearchParams({topic: "", difficulty: ""});
 
     const { search: queryParams } = useLocation();
-
-    const [search, setSearch] = useState(searchParams.get("topic") || '');
-    
-    const {data, isLoading, isError} = useFetch<Quizzes>({endpoint: `${endpoints.getAllQuizzes}${queryParams}`, options});
     const dispatch = useDispatch();
     const navigate = useNavigate();
+  
+
+    const [search, setSearch] = useState(searchParams.get("topic") || '');
+
+    const onError = useCallback((response: Response) => handleAuthError(response.status, dispatch, navigate),[dispatch, navigate])
+    
+    const {data, isLoading, isError} = useFetch<Quizzes>({endpoint: `${endpoints.getAllQuizzes}${queryParams}`, options, onError});
+   
 
     const handleQuizCardClick = (quiz: QuizWithId) => {
       dispatch(setQuizData(quiz));
@@ -64,14 +69,14 @@ function History(){
     if (isError) 
         return <ErrorMessage onRetry={() => window.location.reload()} />;
 
-    if(!data?.quizzes.length)
-        return (
-          <div className="h-screen bg-background flex justify-center items-center">
-            <div className="flex flex-col items-center gap-4">
-              <p className="font-semibold text-2xl">You have not taken any Quizzes yet!</p>
-            </div>
-          </div>
-        )
+    // if(!data?.quizzes.length)
+    //     return (
+    //       <div className="h-screen bg-background flex justify-center items-center">
+    //         <div className="flex flex-col items-center gap-4">
+    //           <p className="font-semibold text-2xl">You have not taken any Quizzes yet!</p>
+    //         </div>
+    //       </div>
+    //     )
 
     return(
         <div className="bg-background h-screen">
@@ -89,7 +94,12 @@ function History(){
                   onChange={handleDifficultyChange}
                 />
               </div>
-                {data?.quizzes?.map(quiz => <QuizCard questions={quiz.questions} customCallback={handleQuizCardClick} score={quiz.score} topic={quiz.topic} genre={quiz.genre} difficulty={quiz.difficulty} _id={quiz["_id"]}/>)}
+                {!data?.quizzes.length && (
+                  <div className="flex flex-col items-center gap-4">
+                    <p className="font-semibold text-2xl">You have not taken any Quizzes yet!</p>
+                  </div>
+                )}
+                {Boolean(data?.quizzes.length) && data?.quizzes?.map(quiz => <QuizCard questions={quiz.questions} customCallback={handleQuizCardClick} score={quiz.score} topic={quiz.topic} genre={quiz.genre} difficulty={quiz.difficulty} _id={quiz["_id"]}/>)}
             </section>
         </div>
     )

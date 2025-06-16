@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import Heading from "../components/Heading1";
 import Button from "../components/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 import { RootState } from "../store";
 import QuestionAnswer from "../components/QuestionAnswer";
-import { useNavigate } from "react-router";
 import endpoints from "../endpoints";
+import { handleAuthError } from "../utils";
+
 
 function Summary(){
     const { quiz } = useSelector((state: RootState) => state.quiz);
@@ -13,6 +16,7 @@ function Summary(){
     console.log("Inside Summary",quiz);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if(!quiz?.questions.length)
@@ -26,9 +30,19 @@ function Summary(){
     } ,0)
 
     const reportQuiz = async () => {
-        const rawResponse = await fetch(endpoints.addQuiz,{method: "POST", body: JSON.stringify({...quiz, score}) ,headers: {"Content-Type": "application/json",authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODM2MDA3MWNiNDQ2MmI1NTJjMzk4MGIiLCJpYXQiOjE3NDg5NDIwNTgsImV4cCI6MTc0ODk0NTY1OH0.hy00u3KozB9VvOFbOJhyMgPVbTBk_XgZJNGkl6AGn0g"}});
-        const response = await rawResponse.json();
-        console.log(response);
+        try{
+            const rawResponse = await fetch(endpoints.addQuiz,{method: "POST", body: JSON.stringify({...quiz, score}) ,headers: {"Content-Type": "application/json",authorization: `Bearer ${localStorage.getItem("token")}`}});
+            if(rawResponse.status === 403){
+                handleAuthError(403, dispatch, navigate);
+                return;
+            }
+            await rawResponse.json();
+            toast.success("Quiz reported successfully!");
+            navigate("/history");
+        } catch(e: any){
+            console.error(e);
+            toast.error("Something went wrong while reporting.");
+        }
     }
 
     return(
@@ -37,7 +51,7 @@ function Summary(){
             <div className="bg-dropdown h-160 w-60 sm:w-120 rounded-3xl overflow-y-auto">
                 {quiz.questions.map((q,idx) => <QuestionAnswer explanation={q.explanation} questionNumber={idx + 1} options={q.options} correctAnswerIdx={q.correctAnswerIdx} selectedAnswerIdx={q.selectedAnswerIdx}/> )}
             </div>
-            <Button customCallback={reportQuiz} label="Home" customStyles="bg-wrong w-60 lg:w-120"/>
+            <Button customCallback={reportQuiz} label="Report Quiz" customStyles="bg-wrong w-60 lg:w-120"/>
         </div>
     )
 }

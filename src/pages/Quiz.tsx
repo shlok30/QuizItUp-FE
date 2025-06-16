@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import Question from "../components/Heading1";
 import Button from "../components/Button";
@@ -34,7 +34,17 @@ function Quiz(){
     const navigate = useNavigate();
     const { quiz } = useSelector((state : RootState) => state.quiz);
 
-    const {isLoading, data, isError} = useFetch<QuizResponse>({endpoint: `${endpoints.getQuizes}${location.search}`, options: {headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}}, onError: (response) => handleAuthError(response.status, dispatch, navigate)});
+    const fetchParams = useMemo(() => ({
+        endpoint: `${endpoints.getQuizes}${location.search}`,
+        options: {
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    },
+        onError: (response: Response) => handleAuthError(response.status, dispatch, navigate)
+}), [location.search, dispatch, navigate]);
+
+    const {isLoading, data, isError} = useFetch<QuizResponse>(fetchParams);
 
     console.log("QUIZ",quiz);
 

@@ -41,7 +41,7 @@ function useFetch<T = unknown>({endpoint,options, onError} : UseFetchProps): Res
         return(() => {
             isMounted = false;
         })
-    },[endpoint,options]) //Need to make sure options is memoised since its an object and its refernce can change on re renders
+    },[endpoint, options, onError]) //Need to make sure options is memoised since its an object and its refernce can change on re renders
 
     return response;
 }

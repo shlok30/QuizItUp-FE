@@ -6,7 +6,7 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  isLoggedIn: false,
+  isLoggedIn: localStorage.getItem("token") ? true  : false,
 };
 
 const authSlice = createSlice({
