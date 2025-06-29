@@ -1,36 +1,32 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useLocation, useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import Heading from "../components/Heading1";
 import QuizCard from "../components/QuizCard";
-import useFetch from "../hooks/useFetch";
-import endpoints from "../endpoints";
 import { setQuizData } from "../features/quiz";
 import Loader from "../components/Loader";
 import ErrorMessage from "../components/ErrorMessage";
 import Input from "../components/Input";
 import { DifficultyFilter } from "../components/DifficultyFilter";
-import { QuizWithId, Quizzes } from "../types";
-import { handleAuthError } from "../utils";
+import { QuizWithId } from "../types";
+import useGetHistory from "../hooks/useGetHistory";
+import Pagination from "rc-pagination";
+import 'rc-pagination/assets/index.css';
+
 
 const filerOptions = [{ id: 'easy', value: 'easy' }, { id: 'medium', value: 'medium' }, { id: 'hard', value: 'hard' }];
 
-const options = {headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}};
-
 function History(){
 
-    const [searchParams, setSearchParams] = useSearchParams({topic: "", difficulty: ""});
+    const [searchParams, setSearchParams] = useSearchParams({topic: "", difficulty: "", pageNumber: '1'});
 
-    const { search: queryParams } = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
   
 
     const [search, setSearch] = useState(searchParams.get("topic") || '');
 
-    const onError = useCallback((response: Response) => handleAuthError(response.status, dispatch, navigate),[dispatch, navigate])
-    
-    const {data, isLoading, isError} = useFetch<Quizzes>({endpoint: `${endpoints.getAllQuizzes}${queryParams}`, options, onError});
+    const {data, isLoading, isError} = useGetHistory({queryParams: searchParams});
    
 
     const handleQuizCardClick = (quiz: QuizWithId) => {
@@ -42,7 +38,7 @@ function History(){
       setSearch(e.target.value); //Or Just use debounce here!!!!!
     }
 
-    const handleSetSearchParams = ({paramLabel, paramValue} : {paramLabel: 'topic' | 'difficulty', paramValue: string}) => {
+    const handleSetSearchParams = ({paramLabel, paramValue} : {paramLabel: 'topic' | 'difficulty' | 'pageNumber', paramValue: string}) => {
       const newParams = new URLSearchParams(searchParams);
       newParams.set(paramLabel, paramValue);
       setSearchParams(newParams);
@@ -69,15 +65,6 @@ function History(){
     if (isError) 
         return <ErrorMessage onRetry={() => window.location.reload()} />;
 
-    // if(!data?.quizzes.length)
-    //     return (
-    //       <div className="h-screen bg-background flex justify-center items-center">
-    //         <div className="flex flex-col items-center gap-4">
-    //           <p className="font-semibold text-2xl">You have not taken any Quizzes yet!</p>
-    //         </div>
-    //       </div>
-    //     )
-
     return(
         <div className="bg-background h-screen">
             <header className="py-8 flex justify-center">
@@ -99,8 +86,19 @@ function History(){
                     <p className="font-semibold text-2xl">You have not taken any Quizzes yet!</p>
                   </div>
                 )}
-                {Boolean(data?.quizzes.length) && data?.quizzes?.map(quiz => <QuizCard questions={quiz.questions} customCallback={handleQuizCardClick} score={quiz.score} topic={quiz.topic} genre={quiz.genre} difficulty={quiz.difficulty} _id={quiz["_id"]}/>)}
+                {Boolean(data?.quizzes.length) && data?.quizzes.map(quiz => <QuizCard questions={quiz.questions} customCallback={handleQuizCardClick} score={quiz.score} topic={quiz.topic} genre={quiz.genre} difficulty={quiz.difficulty} _id={quiz["_id"]}/>)}
             </section>
+
+            {Boolean(data?.quizzes.length) &&
+            <div className="px-8 py-4"> 
+              <Pagination
+                current={Number(searchParams.get("pageNumber")) || 1}
+                total={data?.pagination.totalItems}
+                pageSize={5}
+                onChange={(page) => handleSetSearchParams({paramLabel: "pageNumber", paramValue: page.toString()})}
+              />
+            </div>}
+
         </div>
     )
 }

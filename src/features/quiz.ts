@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Quiz from '../pages/Quiz';
+import { QuizWithId } from '../types';
 
 export type QuizElement = {
     question : string,
@@ -18,8 +19,14 @@ export type Quiz = {
     questions: QuizElement[]
 }
 
+export type History = {
+    quizzes: QuizWithId[],
+    pagination: Record<string,number>
+}
+
 type InitialState = {
-    quiz: Quiz
+    quiz: Quiz,
+    history: Partial<Record<string, History>>
 }
 
 const initialState : InitialState = {
@@ -28,7 +35,8 @@ const initialState : InitialState = {
         genre: "",
         difficulty: "",
         questions: []
-    }
+    },
+    history: {}
 }
 
 const quizSlice = createSlice({
@@ -36,12 +44,14 @@ const quizSlice = createSlice({
     initialState,
     reducers: {
         setQuizData: (state, action) => {
-            console.log("Came here",action.payload);
             state.quiz = action.payload
         },
+        setCacheEntry: (state, action) => {
+            state.history[action.payload.key] = action.payload.data;
+        }
     }
 })
 
-export const {setQuizData} = quizSlice.actions
+export const {setQuizData, setCacheEntry} = quizSlice.actions
 
 export default quizSlice.reducer;
