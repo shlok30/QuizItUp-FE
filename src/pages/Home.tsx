@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Button from "../components/Button";
 import Select from "../components/Select";
 import Input from "../components/Input";
@@ -68,11 +68,13 @@ function App() {
 
   return (
     <div className='bg-background h-screen'>
-      <header className="flex justify-center p-8 flex-col items-center">
-        <img alt="Logo Img" src="Logo.png" className="w-32 h-32"/>
-        <Heading label="Quiz App" />
+      <header className="flex relative justify-center p-8 flex-col items-center">
+        <Link to="/history" className="absolute top-4 right-8 text-primary underline font-medium hover:text-secondary transition">
+          My Quizzes
+        </Link>
+        <img alt="Logo Img" src="Logo.png" className="w-50 h-50"/>
       </header>
-      <section className="flex justify-center items-center flex-col p-20 gap-6">
+      <section className="flex justify-center items-center flex-col px-20 gap-6">
         <Heading customStyle="text-center" level={2} label="What do you want to be Quizzed on?"/>
         <div>
           <Input onBlur={handleBlur} onFocus={handleFocus} error={formValues.input.error} name="input" value={formValues.input.value} onChange={handleChange} type="text" placeholder="Enter the subject"/>

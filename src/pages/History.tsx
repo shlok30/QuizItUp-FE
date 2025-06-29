@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import Heading from "../components/Heading1";
 import QuizCard from "../components/QuizCard";
 import { setQuizData } from "../features/quiz";
@@ -67,8 +67,9 @@ function History(){
 
     return(
         <div className="bg-background h-screen">
-            <header className="py-8 flex justify-center">
+            <header className="py-8 flex justify-center relative">
                 <Heading label="Quiz History" />
+                <Link to="/" className="absolute top-4 right-8 text-primary underline font-medium hover:text-secondary transition">New Quiz</Link>
             </header>
             <section className="flex flex-col items-center gap-12">
               <div className="flex flex-col gap-3">
