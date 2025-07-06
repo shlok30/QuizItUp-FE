@@ -97,19 +97,19 @@ function Quiz(){
     const currentQuestionMeta = quiz.questions[activeIdx];
 
     return(
-        <div className="bg-background h-screen flex flex-col">
-            <div className="flex gap-2 p-6 items-center">
+        <div className="bg-background min-h-screen flex flex-col items-center px-4 py-10">
+            <div className="w-full max-w-3xl flex items-center justify-between mb-8">
                 <QuestionNavigation handleNavigation={handleNavigation} currentNumber={activeIdx + 1} totalNumber={5}/>
             </div>
-            <div className="py-20 flex-1 flex flex-col items-center justify-center">
-                <div className="flex justify-center items-center">
-                    <Question label={currentQuestionMeta?.question} customStyle="text-center"/>
+            <div className="flex-1 flex flex-col items-center justify-center px-4">
+                <div className="flex justify-center items-center w-full max-w-3xl mb-6">
+                    <Question label={currentQuestionMeta?.question} customStyle="text-center text-xl sm:text-2xl font-semibold text-neutral-900"/>
                 </div>
-                <div className="flex justify-center items-center flex-col gap-6 py-8">
-                    {currentQuestionMeta.options.map((option, idx) => <Button customCallback={() => handleOptionClick(idx)} label={option} customStyles={`text-neutral-900 rounded-3xl ${quizSession[activeIdx]?.selectedAnswerIdx === idx.toString() ? 'bg-primary' : 'bg-dropdown-border'}`}/>)}
+                <div className="w-full max-w-3xl flex flex-col gap-4 py-6">
+                    {currentQuestionMeta.options.map((option, idx) => <Button customCallback={() => handleOptionClick(idx)} label={option} customStyles={`w-full text-left px-6 py-3 rounded-2xl border font-medium transition-colors duration-200 ${quizSession[activeIdx]?.selectedAnswerIdx === idx.toString() ? 'bg-primary text-white border-transparent' : 'bg-white text-neutral-800 border border-gray-300 hover:bg-primary/10'}`}/>)}
                 </div>
-                <div className="flex justify-center py-4">
-                    <Button customCallback={handleSubmit} label="Submit" customStyles={Number(quizSession[activeIdx]?.selectedAnswerIdx) >= 0 ? 'bg-secondary' : 'cursor-none pointer-events-none bg-gray-400'}/>
+                <div className="flex justify-center py-6">
+                    <Button customCallback={handleSubmit} label="Submit" customStyles={Number(quizSession[activeIdx]?.selectedAnswerIdx) >= 0 ? 'bg-secondary px-6 py-2 text-white rounded-xl font-semibold' : 'cursor-not-allowed pointer-events-none bg-gray-400 px-6 py-2 text-white rounded-xl'}/>
                 </div>
             </div>
         </div>

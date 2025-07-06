@@ -1,4 +1,5 @@
 import React, { JSX } from "react";
+import { twMerge } from "tailwind-merge";
 
 type HeadingProps = {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
@@ -19,7 +20,7 @@ function Heading({ level = 1, label, customStyle = "" }: HeadingProps) {
   const Tag = `h${level}` as keyof JSX.IntrinsicElements;
 
   return (
-    <Tag className={`${baseStyles[level]} text-neutral-900 font-sans ${customStyle}`}>
+    <Tag className={twMerge(`${baseStyles[level]} text-neutral-900 font-sans`,customStyle)}>
       {label}
     </Tag>
   );
