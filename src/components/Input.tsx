@@ -1,4 +1,5 @@
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 type InputProps = {
     type?: "text" | "number" | "email" | "password",
@@ -31,7 +32,7 @@ function Input({type =  "text", placeholder = "", customStyle= "", onChange, val
 
     return(
         <div className="flex flex-col gap-4">
-            <input onFocus={handleFocus} onBlur={handleBlur} name={name} value={value} onChange={handleChange} type={type} placeholder={placeholder} className={`bg-input p-4 rounded-2xl w-80 md:w-150  lg:w-200 border-2 border-amber-700 text-xl font-bold ${customStyle}`} />
+            <input onFocus={handleFocus} onBlur={handleBlur} name={name} value={value} onChange={handleChange} type={type} placeholder={placeholder} className={twMerge("bg-input p-4 rounded-2xl border-2 border-amber-700 text-xl font-bold", customStyle)} />
             {error && <p className="text-wrong">{error}</p>}
         </div>
     )

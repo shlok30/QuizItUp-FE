@@ -48,10 +48,13 @@ const quizSlice = createSlice({
         },
         setCacheEntry: (state, action) => {
             state.history[action.payload.key] = action.payload.data;
-        }
+        },
+        flushCache: (state) => {
+            state.history = {}
+        },
     }
 })
 
-export const {setQuizData, setCacheEntry} = quizSlice.actions
+export const {setQuizData, setCacheEntry, flushCache} = quizSlice.actions
 
 export default quizSlice.reducer;

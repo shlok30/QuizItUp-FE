@@ -66,14 +66,14 @@ function History(){
         return <ErrorMessage onRetry={() => window.location.reload()} />;
 
     return(
-        <div className="bg-background h-screen">
+        <div className="bg-background px-4 min-h-screen">
             <header className="py-8 flex justify-center relative">
-                <Heading label="Quiz History" />
+                <Heading label="Quiz History" customStyle="py-4"/>
                 <Link to="/" className="absolute top-4 right-8 text-primary underline font-medium hover:text-secondary transition">New Quiz</Link>
             </header>
             <section className="flex flex-col items-center gap-12">
-              <div className="flex flex-col gap-3">
-                <Input onBlur={handleSearchBlur} onChange={handleSearchChange} value={search} type="text" name="search" placeholder="Search by Topic" customStyle="w-3"/>
+              <div className="flex flex-col gap-3 w-full max-w-3xl">
+                <Input onBlur={handleSearchBlur} onChange={handleSearchChange} value={search} type="text" name="search" placeholder="Search by Topic" customStyle="w-full max-w-3xl"/>
                 <p className="font-semibold mb-2 text-xl">Filter By Difficulty</p>
                 <DifficultyFilter
                   name="difficulty"
@@ -91,7 +91,7 @@ function History(){
             </section>
 
             {Boolean(data?.quizzes.length) &&
-            <div className="px-8 py-4"> 
+            <div className="py-4"> 
               <Pagination
                 current={Number(searchParams.get("pageNumber")) || 1}
                 total={data?.pagination.totalItems}

@@ -8,6 +8,7 @@ import { RootState } from "../store";
 import QuestionAnswer from "../components/QuestionAnswer";
 import endpoints from "../endpoints";
 import { handleAuthError } from "../utils";
+import { flushCache } from "../features/quiz";
 
 
 function Summary(){
@@ -38,6 +39,7 @@ function Summary(){
             }
             await rawResponse.json();
             toast.success("Quiz reported successfully!");
+            dispatch(flushCache());
             navigate("/history");
         } catch(e: any){
             console.error(e);
@@ -46,12 +48,12 @@ function Summary(){
     }
 
     return(
-        <div className="bg-primary h-screen flex justify-center items-center flex-col gap-6 py-8">
-            <Heading label={`You scored ${score}/${quiz.questions.length}`} />
-            <div className="bg-dropdown h-160 w-60 sm:w-120 rounded-3xl overflow-y-auto">
+        <div className="bg-background min-h-screen px-4 py-10 flex flex-col items-center gap-8">
+            <Heading label={`You scored ${score}/${quiz.questions.length}`} customStyle="text-3xl text-primary font-bold text-center" />
+            <div className="w-full max-w-3xl bg-white shadow-lg rounded-3xl p-6 flex flex-col gap-6">
                 {quiz.questions.map((q,idx) => <QuestionAnswer explanation={q.explanation} questionNumber={idx + 1} options={q.options} correctAnswerIdx={q.correctAnswerIdx} selectedAnswerIdx={q.selectedAnswerIdx}/> )}
             </div>
-            <Button customCallback={reportQuiz} label="Report Quiz" customStyles="bg-wrong w-60 lg:w-120"/>
+            <Button customCallback={reportQuiz} label="Report Quiz" customStyles="bg-wrong text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-red-600 transition w-full max-w-3xl"/>
         </div>
     )
 }
