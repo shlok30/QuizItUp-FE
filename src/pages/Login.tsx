@@ -94,7 +94,7 @@ export default function Login() {
           (await rawResponse.json()) as LoginResponseType['success'];
         localStorage.setItem('token', response.token);
         dispatch(setLogin());
-        navigate('/');
+        navigate('/create-quiz');
       } catch (e: any) {
         console.error(e);
       }

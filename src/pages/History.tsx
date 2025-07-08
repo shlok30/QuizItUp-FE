@@ -93,7 +93,7 @@ function History() {
       <header className="py-8 flex justify-center relative">
         <Heading label="Quiz History" customStyle="py-4" />
         <Link
-          to="/"
+          to="/create-quiz"
           className="absolute top-4 right-8 text-primary underline font-medium hover:text-secondary transition"
         >
           New Quiz

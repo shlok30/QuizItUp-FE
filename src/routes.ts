@@ -1,5 +1,6 @@
 import History from './pages/History';
 import Home from './pages/Home';
+import LandingPage from './pages/Landing';
 import Login from './pages/Login';
 import Quiz from './pages/Quiz';
 import Summary from './pages/Summary';
@@ -7,6 +8,11 @@ import Summary from './pages/Summary';
 const routes = [
   {
     path: '/',
+    component: LandingPage,
+    isProtected: false,
+  },
+  {
+    path: '/create-quiz',
     component: Home,
     isProtected: true,
   },

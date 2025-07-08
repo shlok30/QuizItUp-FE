@@ -13,8 +13,8 @@ const LandingPage = () => {
         Select topics, track your progress, and improve with every attempt.
       </p>
       <button
-        onClick={() => navigate('/quiz')}
-        className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
+        onClick={() => navigate('/create-quiz')}
+        className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-blue-700 transition cursor-pointer"
       >
         Get Started
       </button>
