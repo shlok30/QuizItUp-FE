@@ -29,13 +29,14 @@ function Quiz() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [quizSession, setQuizSession] = useState<QuizSessionEntity[]>([]);
   const location = useLocation();
+  const queryParams = location.search;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { quiz } = useSelector((state: RootState) => state.quiz);
 
   const fetchParams = useMemo(
     () => ({
-      endpoint: `${endpoints.getQuizes}${location.search}`,
+      endpoint: `${endpoints.getQuizes}${queryParams}`,
       options: {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -44,12 +45,10 @@ function Quiz() {
       onError: (response: Response) =>
         handleAuthError(response.status, dispatch, navigate),
     }),
-    [location.search, dispatch, navigate]
+    [queryParams, dispatch, navigate]
   );
 
   const { isLoading, data, isError } = useFetch<QuizResponse>(fetchParams);
-
-  console.log('QUIZ', quiz);
 
   const handleOptionClick = (optionIdx: number) => {
     setQuizSession(prevState => {
@@ -83,6 +82,10 @@ function Quiz() {
       navigate('/summary');
     }
   };
+
+  useEffect(() => {
+    if (!queryParams) navigate('/create-quiz');
+  }, [navigate, queryParams]);
 
   useEffect(() => {
     if (data) dispatch(setQuizData(data?.data));
@@ -121,6 +124,7 @@ function Quiz() {
         <div className="w-full max-w-3xl flex flex-col gap-4 py-6">
           {currentQuestionMeta.options.map((option, idx) => (
             <Button
+              key={`${option}-${idx}`}
               customCallback={() => handleOptionClick(idx)}
               label={option}
               customStyles={`w-full text-left px-6 py-3 rounded-2xl border font-medium transition-colors duration-200 ${quizSession[activeIdx]?.selectedAnswerIdx === idx.toString() ? 'bg-primary text-white border-transparent' : 'bg-white text-neutral-800 border border-gray-300 hover:bg-primary/10'}`}

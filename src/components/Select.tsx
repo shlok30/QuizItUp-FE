@@ -60,7 +60,9 @@ function Select({
           </option>
         )}
         {options.map(({ id, label }: Option) => (
-          <option value={id}>{label}</option>
+          <option key={`${label}-${id}`} value={id}>
+            {label}
+          </option>
         ))}
       </select>
       {error && <p className="text-wrong">{error}</p>}

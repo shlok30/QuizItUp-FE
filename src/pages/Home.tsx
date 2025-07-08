@@ -114,7 +114,11 @@ function App() {
             placeholder="Select Difficulty"
           />
         </div>
-        <Button label="Generate Quiz" customCallback={handleSubmit} />
+        <Button
+          label="Generate Quiz"
+          customCallback={handleSubmit}
+          customStyles="w-80 md:w-150  lg:w-200"
+        />
       </section>
     </div>
   );

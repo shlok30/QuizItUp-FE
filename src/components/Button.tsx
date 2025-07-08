@@ -20,7 +20,7 @@ function Button({
     <button
       onClick={handleClick}
       className={twMerge(
-        'cursor-pointer bg-primary text-white w-80 md:w-150  lg:w-200 rounded-full p-4 text-xl font-bold',
+        'cursor-pointer bg-primary text-white rounded-full p-4 text-xl font-bold',
         customStyles
       )}
     >
