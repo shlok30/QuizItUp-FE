@@ -1,5 +1,3 @@
-import React from "react";
-
 type QuestionAnswerProps = {
     questionNumber: number,
     correctAnswerIdx: string,

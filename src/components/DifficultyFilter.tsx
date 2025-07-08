@@ -1,5 +1,5 @@
 type FilterItem = {
-  id: string;
+  label: string;
   value: string;
 };
 
@@ -13,17 +13,17 @@ type DifficultyFilterProps = {
 export function DifficultyFilter({ filterItems, name, onChange, selectedValue }: DifficultyFilterProps) {
   return (
     <div>
-      {filterItems.map(({ id, value }) => (
-        <div key={id} className="flex items-center gap-2">
+      {filterItems.map(({ label, value },idx) => (
+        <div key={`${label}-${value}-${idx}`} className="flex items-center gap-2">
           <input
             type="radio"
-            id={id}
+            id={value}
             name={name}
             value={value}
             onChange={onChange}
             checked={selectedValue === value}
           />
-          <label htmlFor={id}>{value.charAt(0).toUpperCase() + value.slice(1)}</label>
+          <label htmlFor={value}>{label.charAt(0).toUpperCase() + label.slice(1)}</label>
         </div>
       ))}
     </div>

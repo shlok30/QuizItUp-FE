@@ -1,5 +1,3 @@
-import React from "react";
-
 type ErrorMessageProps = {
   message?: string;
   onRetry?: () => void;

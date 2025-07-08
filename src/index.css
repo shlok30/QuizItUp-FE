@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #FFFBF5;
-  --color-primary: #00BFA6;  /* Generate Quiz button */
-  --color-secondary: #A78BFA;  /* Submit button */
-  --color-wrong: #FF6B6B;  /* Wrong answers */
-  --color-correct: #4CAF50;  /* Correct answers */
-  --color-input: #FFC7A5;  /* Input box background */
-  --color-card: #E0F7FA;  /* Quiz card background */
-  --color-dropdown: #FFF3A3;
-  --color-dropdown-border: #E8C14D;
-  --color-selected-option: #3ACCDF;
+  --color-background: #FAFAFA;       /* Light neutral background */
+  --color-primary: #2563EB;          /* Indigo-600 - Buttons and links */
+  --color-secondary: #4B5563;        /* Gray-700 - Secondary text */
+  --color-wrong: #DC2626;            /* Red-600 - Wrong answers */
+  --color-correct: #16A34A;          /* Green-600 - Correct answers */
+  --color-input: #F3F4F6;            /* Gray-100 - Input backgrounds */
+  --color-card: #FFFFFF;             /* White - Card background */
+  --color-dropdown: #F9FAFB;         /* Gray-50 - Dropdown menu */
+  --color-dropdown-border: #D1D5DB;  /* Gray-300 - Dropdown borders */
+  --color-selected-option: #E0E7FF;  /* Indigo-100 - Selected option bg */
 }

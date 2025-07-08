@@ -108,8 +108,8 @@ function Quiz(){
                 <div className="w-full max-w-3xl flex flex-col gap-4 py-6">
                     {currentQuestionMeta.options.map((option, idx) => <Button customCallback={() => handleOptionClick(idx)} label={option} customStyles={`w-full text-left px-6 py-3 rounded-2xl border font-medium transition-colors duration-200 ${quizSession[activeIdx]?.selectedAnswerIdx === idx.toString() ? 'bg-primary text-white border-transparent' : 'bg-white text-neutral-800 border border-gray-300 hover:bg-primary/10'}`}/>)}
                 </div>
-                <div className="flex justify-center py-6">
-                    <Button customCallback={handleSubmit} label="Submit" customStyles={Number(quizSession[activeIdx]?.selectedAnswerIdx) >= 0 ? 'bg-secondary px-6 py-2 text-white rounded-xl font-semibold' : 'cursor-not-allowed pointer-events-none bg-gray-400 px-6 py-2 text-white rounded-xl'}/>
+                <div className="w-full max-w-3xl py-6">
+                    <Button customCallback={handleSubmit} label="Submit" customStyles={Number(quizSession[activeIdx]?.selectedAnswerIdx) >= 0 ? 'bg-secondary px-6 py-2 text-white rounded-xl font-semibold w-full' : 'cursor-not-allowed pointer-events-none bg-gray-400 px-6 py-2 text-white rounded-xl w-full'}/>
                 </div>
             </div>
         </div>

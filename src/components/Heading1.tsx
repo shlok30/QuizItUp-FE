@@ -1,4 +1,4 @@
-import React, { JSX } from "react";
+import { JSX } from "react";
 import { twMerge } from "tailwind-merge";
 
 type HeadingProps = {

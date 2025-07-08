@@ -1,6 +1,3 @@
-import React from "react";
-
-
 function QuestionNavigation({currentNumber, totalNumber, handleNavigation} : {currentNumber: number, totalNumber: number, handleNavigation: () => void}){
     return(
         <>

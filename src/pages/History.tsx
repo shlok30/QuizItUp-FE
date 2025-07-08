@@ -14,7 +14,7 @@ import Pagination from "rc-pagination";
 import 'rc-pagination/assets/index.css';
 
 
-const filerOptions = [{ id: 'easy', value: 'easy' }, { id: 'medium', value: 'medium' }, { id: 'hard', value: 'hard' }];
+const filerOptions = [{label: 'all', value: ""},{ label: 'easy', value: 'easy' }, { label: 'medium', value: 'medium' }, { label: 'hard', value: 'hard' }];
 
 function History(){
 
@@ -31,25 +31,27 @@ function History(){
 
     const handleQuizCardClick = (quiz: QuizWithId) => {
       dispatch(setQuizData(quiz));
-      navigate("/summary");
+      navigate("/summary",{state: {fromHistory: true}});
     }
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearch(e.target.value); //Or Just use debounce here!!!!!
     }
 
-    const handleSetSearchParams = ({paramLabel, paramValue} : {paramLabel: 'topic' | 'difficulty' | 'pageNumber', paramValue: string}) => {
+    const handleSetSearchParams = ({paramLabel, paramValue, resetPageNumber = false} : {paramLabel: 'topic' | 'difficulty' | 'pageNumber', paramValue: string, resetPageNumber?: boolean}) => {
       const newParams = new URLSearchParams(searchParams);
       newParams.set(paramLabel, paramValue);
+      if(resetPageNumber)
+        newParams.set('pageNumber','1');
       setSearchParams(newParams);
     }
 
     const handleSearchBlur = () => {
-      handleSetSearchParams({paramLabel: "topic", paramValue: search})
+      handleSetSearchParams({paramLabel: "topic", paramValue: search, resetPageNumber: true})
     }
 
     const handleDifficultyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      handleSetSearchParams({paramLabel: "difficulty",paramValue: e.target.value})
+      handleSetSearchParams({paramLabel: "difficulty",paramValue: e.target.value, resetPageNumber: true})
     }
 
     if(isLoading)

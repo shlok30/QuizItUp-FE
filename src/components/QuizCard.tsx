@@ -1,4 +1,3 @@
-import React from "react";
 import { QuizWithId } from "../types";
 
 function QuizCard({topic, genre, difficulty, _id='', score, customCallback, questions} : (QuizWithId & {customCallback: (quizObject: QuizCardProps) => void})){

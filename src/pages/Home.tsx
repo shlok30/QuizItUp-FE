@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useNavigate } from "react-router";
 import Button from "../components/Button";
 import Select from "../components/Select";
@@ -77,7 +76,7 @@ function App() {
       <section className="flex justify-center items-center flex-col px-20 gap-6">
         <Heading customStyle="text-center" level={2} label="What do you want to be Quizzed on?"/>
         <div>
-          <Input onBlur={handleBlur} onFocus={handleFocus} error={formValues.input.error} name="input" value={formValues.input.value} onChange={handleChange} type="text" placeholder="Enter the subject"/>
+          <Input onBlur={handleBlur} onFocus={handleFocus} error={formValues.input.error} name="input" value={formValues.input.value} onChange={handleChange} type="text" placeholder="Enter the subject" customStyle="w-80 md:w-150 lg:w-200"/>
         </div> 
         <div>
           <Select onBlur={handleBlur} onFocus={handleFocus} value={formValues.difficulty.value} name="difficulty" error={formValues.difficulty.error} onChange={handleChange} options={options} placeholder="Select Difficulty"/>

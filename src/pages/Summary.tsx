@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Heading from "../components/Heading1";
 import Button from "../components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { RootState } from "../store";
 import QuestionAnswer from "../components/QuestionAnswer";
 import endpoints from "../endpoints";
@@ -14,7 +14,8 @@ import { flushCache } from "../features/quiz";
 function Summary(){
     const { quiz } = useSelector((state: RootState) => state.quiz);
 
-    console.log("Inside Summary",quiz);
+    const { state } = useLocation();
+    const fromHistory = state?.fromHistory;
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -53,7 +54,7 @@ function Summary(){
             <div className="w-full max-w-3xl bg-white shadow-lg rounded-3xl p-6 flex flex-col gap-6">
                 {quiz.questions.map((q,idx) => <QuestionAnswer explanation={q.explanation} questionNumber={idx + 1} options={q.options} correctAnswerIdx={q.correctAnswerIdx} selectedAnswerIdx={q.selectedAnswerIdx}/> )}
             </div>
-            <Button customCallback={reportQuiz} label="Report Quiz" customStyles="bg-wrong text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-red-600 transition w-full max-w-3xl"/>
+            {!fromHistory && <Button customCallback={reportQuiz} label="Report Quiz" customStyles="bg-wrong text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-red-600 transition w-full max-w-3xl"/>}
         </div>
     )
 }
