@@ -4,6 +4,7 @@ type QuestionAnswerProps = {
   selectedAnswerIdx: string;
   explanation: string;
   options: string[];
+  question: string;
 };
 
 function QuestionAnswer({
@@ -12,6 +13,7 @@ function QuestionAnswer({
   selectedAnswerIdx,
   explanation,
   options,
+  question,
 }: QuestionAnswerProps) {
   const isMyAnswerWrong = correctAnswerIdx !== selectedAnswerIdx;
   const correctAnswer = options[Number(correctAnswerIdx)];
@@ -20,7 +22,8 @@ function QuestionAnswer({
   return (
     <div className="border border-gray-200 rounded-2xl p-6 bg-gray-50 flex flex-col gap-3 shadow-sm">
       <p className="border border-gray-200 rounded-2xl p-6 bg-gray-50 flex flex-col gap-3 shadow-sm">
-        Question {questionNumber}
+        <span>Question {questionNumber}</span>
+        <span>{question}</span>
       </p>
       {isMyAnswerWrong && (
         <p className="text-wrong bg-red-50 px-4 py-2 rounded-xl">

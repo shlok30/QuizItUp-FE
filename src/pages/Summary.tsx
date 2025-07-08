@@ -69,6 +69,7 @@ function Summary() {
             options={q.options}
             correctAnswerIdx={q.correctAnswerIdx}
             selectedAnswerIdx={q.selectedAnswerIdx}
+            question={q.question}
           />
         ))}
       </div>
