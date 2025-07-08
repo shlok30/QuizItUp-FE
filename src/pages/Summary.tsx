@@ -52,7 +52,7 @@ function Summary(){
         <div className="bg-background min-h-screen px-4 py-10 flex flex-col items-center gap-8">
             <Heading label={`You scored ${score}/${quiz.questions.length}`} customStyle="text-3xl text-primary font-bold text-center" />
             <div className="w-full max-w-3xl bg-white shadow-lg rounded-3xl p-6 flex flex-col gap-6">
-                {quiz.questions.map((q,idx) => <QuestionAnswer explanation={q.explanation} questionNumber={idx + 1} options={q.options} correctAnswerIdx={q.correctAnswerIdx} selectedAnswerIdx={q.selectedAnswerIdx}/> )}
+                {quiz.questions.map((q,idx) => <QuestionAnswer key={`${q.question}-${idx}`} explanation={q.explanation} questionNumber={idx + 1} options={q.options} correctAnswerIdx={q.correctAnswerIdx} selectedAnswerIdx={q.selectedAnswerIdx}/> )}
             </div>
             {!fromHistory && <Button customCallback={reportQuiz} label="Report Quiz" customStyles="bg-wrong text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-red-600 transition w-full max-w-3xl"/>}
         </div>

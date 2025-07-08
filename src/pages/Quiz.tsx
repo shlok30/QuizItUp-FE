@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import Question from "../components/Heading1";
 import Button from "../components/Button";
@@ -99,7 +99,7 @@ function Quiz(){
     return(
         <div className="bg-background min-h-screen flex flex-col items-center px-4 py-10">
             <div className="w-full max-w-3xl flex items-center justify-between mb-8">
-                <QuestionNavigation handleNavigation={handleNavigation} currentNumber={activeIdx + 1} totalNumber={5}/>
+                <QuestionNavigation handleNavigation={handleNavigation} currentNumber={activeIdx + 1} totalNumber={quiz.questions.length}/>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center px-4">
                 <div className="flex justify-center items-center w-full max-w-3xl mb-6">

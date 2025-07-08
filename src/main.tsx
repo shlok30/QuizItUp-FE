@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router'
 import { Provider } from 'react-redux'
 import { Toaster } from 'react-hot-toast'
 import { store } from './store/index.ts'
-import App from './app.tsx'
+import App from './App.tsx'
 import './index.css'
 
 

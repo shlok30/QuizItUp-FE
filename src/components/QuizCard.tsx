@@ -1,13 +1,13 @@
 import { QuizWithId } from "../types";
 
-function QuizCard({topic, genre, difficulty, _id='', score, customCallback, questions} : (QuizWithId & {customCallback: (quizObject: QuizCardProps) => void})){
+function QuizCard({topic, genre, difficulty, _id='', score, customCallback, questions} : (QuizWithId & {customCallback: (quizObject: QuizWithId) => void})){
 
     const handleClick = () => {
         customCallback({
             topic,
             genre,
             difficulty,
-            id: _id,
+            _id,
             score,
             questions
         });
@@ -20,7 +20,7 @@ function QuizCard({topic, genre, difficulty, _id='', score, customCallback, ques
                 <p className="text-zinc-400">Difficulty: {difficulty} | Genre: {genre}</p>
             </div>
             <div className="self-center">
-                <p className="text-xl">{score}/10</p>
+                <p className="text-xl">{score}/{questions.length}</p>
             </div>
         </button>
     )
