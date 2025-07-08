@@ -1,14 +1,14 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --color-background: #FAFAFA;       /* Light neutral background */
-  --color-primary: #2563EB;          /* Indigo-600 - Buttons and links */
-  --color-secondary: #4B5563;        /* Gray-700 - Secondary text */
-  --color-wrong: #DC2626;            /* Red-600 - Wrong answers */
-  --color-correct: #16A34A;          /* Green-600 - Correct answers */
-  --color-input: #F3F4F6;            /* Gray-100 - Input backgrounds */
-  --color-card: #FFFFFF;             /* White - Card background */
-  --color-dropdown: #F9FAFB;         /* Gray-50 - Dropdown menu */
-  --color-dropdown-border: #D1D5DB;  /* Gray-300 - Dropdown borders */
-  --color-selected-option: #E0E7FF;  /* Indigo-100 - Selected option bg */
+  --color-background: #fafafa; /* Light neutral background */
+  --color-primary: #2563eb; /* Indigo-600 - Buttons and links */
+  --color-secondary: #4b5563; /* Gray-700 - Secondary text */
+  --color-wrong: #dc2626; /* Red-600 - Wrong answers */
+  --color-correct: #16a34a; /* Green-600 - Correct answers */
+  --color-input: #f3f4f6; /* Gray-100 - Input backgrounds */
+  --color-card: #ffffff; /* White - Card background */
+  --color-dropdown: #f9fafb; /* Gray-50 - Dropdown menu */
+  --color-dropdown-border: #d1d5db; /* Gray-300 - Dropdown borders */
+  --color-selected-option: #e0e7ff; /* Indigo-100 - Selected option bg */
 }

@@ -6,17 +6,17 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  isLoggedIn: localStorage.getItem("token") ? true  : false,
+  isLoggedIn: localStorage.getItem('token') ? true : false,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setLogin: (state) => {
+    setLogin: state => {
       state.isLoggedIn = true;
     },
-    setLogout: (state) => {
+    setLogout: state => {
       state.isLoggedIn = false;
     },
   },

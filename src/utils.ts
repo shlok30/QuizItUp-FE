@@ -1,11 +1,15 @@
-import { NavigateFunction } from "react-router";
-import { setLogout } from "./features/auth";
-import { AppDispatch } from "./store";
+import { NavigateFunction } from 'react-router';
+import { setLogout } from './features/auth';
+import { AppDispatch } from './store';
 
-export const handleAuthError = (status: number, dispatch: AppDispatch, navigate: NavigateFunction) => {
+export const handleAuthError = (
+  status: number,
+  dispatch: AppDispatch,
+  navigate: NavigateFunction
+) => {
   if (status === 403) {
     dispatch(setLogout());
-    navigate("/login");
+    navigate('/login');
   }
 };
 
@@ -15,7 +19,9 @@ export function getCacheKey(searchParams: URLSearchParams): string {
     params[key] = value;
   }
   const sortedKeys = Object.keys(params).sort();
-  const normalizedParams = sortedKeys.map(key => `${key}=${params[key]}`).join("&");
+  const normalizedParams = sortedKeys
+    .map(key => `${key}=${params[key]}`)
+    .join('&');
 
   return normalizedParams;
 }

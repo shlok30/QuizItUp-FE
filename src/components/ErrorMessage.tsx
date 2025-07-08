@@ -3,7 +3,10 @@ type ErrorMessageProps = {
   onRetry?: () => void;
 };
 
-function ErrorMessage({ message = "Something went wrong. Please try again.", onRetry }: ErrorMessageProps) {
+function ErrorMessage({
+  message = 'Something went wrong. Please try again.',
+  onRetry,
+}: ErrorMessageProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-6 text-center text-red-600">
       <p className="text-xl font-semibold">{message}</p>
