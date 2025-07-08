@@ -32,7 +32,7 @@ function Input({type =  "text", placeholder = "", customStyle= "", onChange, val
 
     return(
         <div className="flex flex-col gap-4">
-            <input onFocus={handleFocus} onBlur={handleBlur} name={name} value={value} onChange={handleChange} type={type} placeholder={placeholder} className={twMerge("bg-input p-4 rounded-2xl border-2 border-amber-700 text-xl font-bold", customStyle)} />
+            <input onFocus={handleFocus} onBlur={handleBlur} name={name} value={value} onChange={handleChange} type={type} placeholder={placeholder} className={twMerge(`bg-input p-4 rounded-2xl border-2 focus:border-primary text-xl font-bold ${error ? 'border-wrong' : ''}`, customStyle)} />
             {error && <p className="text-wrong">{error}</p>}
         </div>
     )
