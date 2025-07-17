@@ -128,6 +128,7 @@ function History() {
         {Boolean(data?.quizzes.length) &&
           data?.quizzes.map(quiz => (
             <QuizCard
+              key={quiz['_id']}
               questions={quiz.questions}
               customCallback={handleQuizCardClick}
               score={quiz.score}

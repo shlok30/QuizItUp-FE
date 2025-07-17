@@ -5,6 +5,7 @@ const endpoints = {
   addQuiz: `${BASE_URL}/users/quiz`,
   getAllQuizzes: `${BASE_URL}/users/quizzes`,
   login: `${BASE_URL}/users/login`,
+  getAuthResolved: `${BASE_URL}/users/verify-token`,
 };
 
 export default endpoints;

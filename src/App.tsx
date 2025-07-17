@@ -1,8 +1,10 @@
 import { Route, Routes } from 'react-router';
 import ProtectedRoutes from './components/ProtectedRoute';
 import routes from './routes';
+import useAuthResolver from './hooks/useAuthResolver';
 
 function App() {
+  useAuthResolver();
   return (
     <>
       <Routes>
