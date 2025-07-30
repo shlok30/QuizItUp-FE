@@ -6,13 +6,16 @@ import { Toaster } from 'react-hot-toast';
 import { store } from './store/index.ts';
 import App from './App.tsx';
 import './index.css';
+import FileUploadContextProvider from './components/FileUploadContextProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <Toaster />
-        <App />
+        <FileUploadContextProvider>
+          <App />
+        </FileUploadContextProvider>
       </BrowserRouter>
     </Provider>
   </StrictMode>

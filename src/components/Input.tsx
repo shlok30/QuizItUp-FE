@@ -2,11 +2,13 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type InputProps = {
-  type?: 'text' | 'number' | 'email' | 'password';
+  type?: 'text' | 'number' | 'email' | 'password' | 'file';
+  disabled?: boolean;
+  accept?: string;
   placeholder?: string;
   customStyle?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value: string;
+  value?: string;
   name: string;
   error?: string;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,6 +25,7 @@ function Input({
   onBlur,
   onFocus,
   error = '',
+  disabled = false,
 }: InputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) onChange(e);
@@ -43,6 +46,7 @@ function Input({
         onBlur={handleBlur}
         name={name}
         value={value}
+        disabled={disabled}
         onChange={handleChange}
         type={type}
         placeholder={placeholder}
