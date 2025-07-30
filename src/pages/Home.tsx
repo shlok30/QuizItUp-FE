@@ -4,6 +4,8 @@ import Select from '../components/Select';
 import Input from '../components/Input';
 import Heading from '../components/Heading1';
 import useForm from '../useForm';
+import { useContext, useEffect } from 'react';
+import { FileUploadContext } from '../context/FileUploadContext';
 
 const options = [
   {
@@ -24,7 +26,7 @@ const options = [
   },
 ];
 
-const validations = {
+const validations = constraint => ({
   input: [
     {
       name: 'Max Length',
@@ -33,7 +35,8 @@ const validations = {
     },
     {
       name: 'Required',
-      validation: (value: string) => Boolean(value.trim().length),
+      validation: (value: string) =>
+        constraint.file || Boolean(value.trim().length),
       error: 'This is a required field!',
     },
   ],
@@ -44,21 +47,28 @@ const validations = {
       error: 'This is a required field!',
     },
   ],
-};
+});
 
 function App() {
+  const { file, setFile } = useContext(FileUploadContext);
+
+  useEffect(() => {
+    setFile(null);
+  }, []);
+
   const {
     formValues,
     handleBlur,
     handleChange,
     handleFocus,
     validateAllFields,
+    resetField,
   } = useForm({
     initialValues: {
       input: { value: '', error: '' },
       difficulty: { value: '', error: '' },
     },
-    validations,
+    validations: validations({ file }),
   });
 
   const navigate = useNavigate();
@@ -68,7 +78,17 @@ function App() {
     if (!errors.length) {
       const topic = formValues.input.value.trim();
       const difficulty = formValues.difficulty.value;
-      navigate(`/quiz?topic=${topic}&difficulty=${difficulty}`);
+      navigate(
+        `/quiz?topic=${topic}&difficulty=${difficulty}&isFile=${Boolean(file)}`
+      );
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = event.target.files?.[0];
+    if (selected) {
+      setFile(selected);
+      resetField('input');
     }
   };
 
@@ -99,8 +119,27 @@ function App() {
             onChange={handleChange}
             type="text"
             placeholder="Enter the subject"
-            customStyle="w-80 md:w-150 lg:w-200"
+            disabled={Boolean(file)}
+            customStyle={`w-80 md:w-150 lg:w-200 ${
+              file ? 'bg-gray-200 cursor-not-allowed' : ''
+            }`}
           />
+        </div>
+        <p className="text-gray-500 font-medium">OR</p>
+        <div className="flex flex-col gap-4 items-center w-80 md:w-150 lg:w-200">
+          <label className="bg-secondary text-white px-4 py-2 rounded-lg cursor-pointer w-full text-center hover:bg-secondary/90 transition">
+            Upload File
+            <Input
+              name="upload"
+              type="file"
+              accept=".pdf,.docx"
+              customStyle="hidden "
+              onChange={handleFileChange}
+            />
+          </label>
+          {file && (
+            <p className="text-sm text-gray-700">Selected: {file.name}</p>
+          )}
         </div>
         <div>
           <Select

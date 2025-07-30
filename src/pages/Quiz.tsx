@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import Question from '../components/Heading1';
 import Button from '../components/Button';
@@ -11,6 +11,7 @@ import { setQuizData } from '../features/quiz';
 import { RootState } from '../store';
 import ErrorMessage from '../components/ErrorMessage';
 import { handleAuthError } from '../utils';
+import { FileUploadContext } from '../context/FileUploadContext';
 
 type QuizSessionEntity = {
   selectedAnswerIdx: string;
@@ -28,16 +29,31 @@ type QuizResponse = {
 function Quiz() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [quizSession, setQuizSession] = useState<QuizSessionEntity[]>([]);
+
+  const { file } = useContext(FileUploadContext);
+
   const location = useLocation();
   const queryParams = location.search;
+  const formattedQueryParams = new URLSearchParams(queryParams);
+  const isFile = formattedQueryParams.get('isFile')
+    ? formattedQueryParams.get('isFile')
+    : false;
+  const topic = formattedQueryParams.get('topic');
+  const difficulty = formattedQueryParams.get('difficulty');
+  const formData = new FormData();
+  formData.append('file', isFile ? file : undefined); // File object
+  formData.append('topic', topic);
+  formData.append('difficulty', difficulty);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { quiz } = useSelector((state: RootState) => state.quiz);
 
   const fetchParams = useMemo(
     () => ({
-      endpoint: `${endpoints.getQuizes}${queryParams}`,
+      endpoint: `${endpoints.getQuizes}`,
       options: {
+        method: 'POST',
+        body: formData,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -45,7 +61,7 @@ function Quiz() {
       onError: (response: Response) =>
         handleAuthError(response.status, dispatch, navigate),
     }),
-    [queryParams, dispatch, navigate]
+    [dispatch, navigate, difficulty, file, isFile, topic]
   );
 
   const { isLoading, data, isError } = useFetch<QuizResponse>(fetchParams);
@@ -84,7 +100,7 @@ function Quiz() {
   };
 
   useEffect(() => {
-    if (!queryParams) navigate('/create-quiz');
+    if (!queryParams || (isFile && !file)) navigate('/create-quiz');
   }, [navigate, queryParams]);
 
   useEffect(() => {

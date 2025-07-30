@@ -81,12 +81,17 @@ function useForm({ initialValues, validations }: UseFormProps) {
     return errors;
   };
 
+  const resetField = (fieldName: string) => {
+    setFormValues(prev => ({ ...prev, [fieldName]: { error: '', value: '' } }));
+  };
+
   return {
     formValues,
     handleChange,
     handleBlur,
     handleFocus,
     validateAllFields,
+    resetField,
   };
 }
 
